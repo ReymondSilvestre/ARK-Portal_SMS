@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ARK School Management System</title>
+<link rel="stylesheet" href="css/style.css"></head><body>
+<div id="login" style="display:none"><h1>ARK Technological Institute<br>School Management</h1>
+<input id="em" type="email" placeholder="Email"><input id="pw" type="password" placeholder="Password"><button onclick="signIn()" style="width:100%">Sign in</button><p id="lerr" style="color:#b3261e"></p></div>
+<div id="app" style="display:none"><nav><b>ARK Technological Institute</b><div id="menu"></div><a onclick="auth.signOut()" style="margin-top:1rem;border-top:1px solid rgba(255,255,255,.3)">Log out</a></nav><main id="main"></main></div>
+<div id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script></body></html>

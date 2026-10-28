@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    function me() { return get(/databases/$(db)/documents/users/$(request.auth.uid)).data; }
+    function ok() { return request.auth != null && exists(/databases/$(db)/documents/users/$(request.auth.uid)) && me().active == true; }
+    function isA() { return ok() && me().role == 'admin'; }
+    function reg() { return ok() && me().role in ['admin','registrar']; }
+    function prop() { return ok() && me().role in ['admin','custodian']; }
+
+    match /users/{u} {
+      allow read: if request.auth != null && (request.auth.uid == u || isA());
+      allow write: if isA();
+    }
+    match /students/{d}            { allow read: if ok(); allow create, update: if reg(); allow delete: if false; }
+    match /enrollments/{d}         { allow read: if ok(); allow create, update: if reg(); allow delete: if false; }
+    match /registrarDocuments/{d}  { allow read: if ok(); allow create, update: if reg(); allow delete: if false; }
+    match /propertyRecords/{d}     { allow read: if ok(); allow create, update: if prop(); allow delete: if false; }
+    match /auditLogs/{d}           { allow read: if isA(); allow create: if ok(); allow update, delete: if false; }
+    match /{c}/{d} {
+      allow read: if ok() && c in ['schoolYears','clusters','sections','advisers','electives','settings'];
+      allow write: if isA() && c in ['schoolYears','clusters','sections','advisers','electives','settings'];
+    }
+  }
+}
